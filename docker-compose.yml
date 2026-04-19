@@ -1,25 +1,43 @@
-  services:
+services:
   api:
-    build: .
-    container_name: tehtek_api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tehtek_erp_api
     env_file:
-      - .env
+      - ./backend/.env
     depends_on:
       - db
     restart: unless-stopped
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
 
   db:
     image: postgres:16
-    container_name: tehtek_db
+    container_name: tehtek_erp_db
     environment:
-      POSTGRES_DB: tehtek
+      POSTGRES_DB: tehtek_erp
       POSTGRES_USER: tehtek
-      POSTGRES_PASSWORD: strongpassword
+      POSTGRES_PASSWORD: CHANGE_ME_DB_PASSWORD
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  caddy:
+    image: caddy:2
+    container_name: tehtek_erp_caddy
+    depends_on:
+      - api
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
