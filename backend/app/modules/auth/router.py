@@ -41,7 +41,8 @@ async def register(data: RegisterRequest, session: AsyncSession = Depends(get_se
         UserCreate(
             email=data.email,
             password=data.password,
-            full_name=data.full_name,
+            first_name=data.first_name,
+            last_name=data.last_name,
             phone=data.phone,
             role=Role.CUSTOMER,
         ),

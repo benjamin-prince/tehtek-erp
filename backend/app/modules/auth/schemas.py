@@ -1,5 +1,5 @@
 """Auth request/response schemas."""
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 from app.modules.users.schemas import UserRead
 
@@ -11,10 +11,11 @@ class LoginRequest(BaseModel):
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: str
-    full_name: str
+    password: str = Field(..., min_length=8, max_length=128)
+    first_name: str = Field(..., min_length=1, max_length=80)
+    last_name: str = Field(..., min_length=1, max_length=80)
     phone: str | None = None
-    # Self-registration is customer-only — admins/employees are created internally
+    # Self-registration is customer-only — admins/employees are created internally.
     # Role defaults to customer and cannot be set from this endpoint.
 
 
