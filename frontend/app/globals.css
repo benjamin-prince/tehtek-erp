@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@import "tailwindcss";
+
+/* Tailwind v4 design tokens. Everything here generates utility classes
+   automatically: --color-paper -> bg-paper, text-paper, border-paper etc. */
+@theme {
+  --font-display: "Fraunces", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-paper: #f5f1e8;
+  --color-paper-elevated: #fbf8f1;
+  --color-ink: #1a1715;
+  --color-muted: #6b635a;
+  --color-line: #d9d1c0;
+  --color-line-strong: #c3baa6;
+
+  --color-accent: #b55b2d;
+  --color-accent-soft: #e2a882;
+
+  --color-success: #228b58;
+  --color-warning: #b37218;
+  --color-danger: #b03a2e;
+
+  --tracking-tightest: -0.04em;
+}
+
+/* Status tone variables — consumed as inline styles in components */
+:root {
+  --tone-accent-bg: rgba(181, 91, 45, 0.08);
+  --tone-success-bg: rgba(34, 139, 88, 0.08);
+  --tone-warning-bg: rgba(179, 114, 24, 0.08);
+  --tone-danger-bg: rgba(176, 58, 46, 0.08);
+  --tone-neutral-bg: rgba(60, 56, 51, 0.06);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Faint paper grid — atmosphere, not noise */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(26, 23, 21, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 23, 21, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           text-sm font-medium tracking-wide
+           bg-ink text-paper
+           hover:bg-accent
+           transition-colors duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           text-sm font-medium
+           border border-line-strong text-ink
+           hover:border-ink hover:bg-ink hover:text-paper
+           transition-all duration-150;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-sm text-ink/70 hover:text-ink
+           transition-colors duration-150;
+  }
+
+  .input-base {
+    @apply w-full px-0 py-2.5
+           bg-transparent text-ink
+           placeholder:text-muted/60
+           border-0 border-b border-line-strong
+           focus:border-ink focus:outline-none focus:ring-0
+           transition-colors duration-150;
+  }
+
+  .label-base {
+    @apply block font-mono text-[0.68rem] uppercase text-muted mb-1.5;
+    letter-spacing: 0.12em;
+  }
+
+  .card {
+    @apply relative bg-paper-elevated border border-line;
+  }
+
+  .rule {
+    @apply h-px bg-line-strong;
+  }
+
+  .mono-code {
+    @apply font-mono text-sm;
+    letter-spacing: -0.01em;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
