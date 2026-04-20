@@ -11,7 +11,8 @@ export default function RegisterPage() {
   const router = useRouter();
   const { setSession } = useAuth();
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +26,13 @@ export default function RegisterPage() {
     try {
       const tokens = await api.post<TokenPair>(
         "/auth/register",
-        { full_name: fullName, email, phone: phone || undefined, password },
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          phone: phone || undefined,
+          password,
+        },
         { auth: false },
       );
       setSession({
@@ -61,17 +68,34 @@ export default function RegisterPage() {
       </p>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="fullName" className="label-base">
-            Full name
-          </label>
-          <input
-            id="fullName"
-            required
-            className="input-base"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="firstName" className="label-base">
+              First name
+            </label>
+            <input
+              id="firstName"
+              required
+              autoComplete="given-name"
+              className="input-base"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="lastName" className="label-base">
+              Last name
+            </label>
+            <input
+              id="lastName"
+              required
+              autoComplete="family-name"
+              className="input-base"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
         </div>
 
         <div>
@@ -96,6 +120,7 @@ export default function RegisterPage() {
           <input
             id="phone"
             type="tel"
+            autoComplete="tel"
             className="input-base"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}

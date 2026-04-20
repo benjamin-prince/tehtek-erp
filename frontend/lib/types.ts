@@ -7,6 +7,15 @@ export type Role =
   | "middleman"
   | "customer";
 
+export type Gender = "male" | "female" | "other" | "undisclosed";
+
+export type IdDocumentType =
+  | "passport"
+  | "national_id"
+  | "driver_license"
+  | "residence_permit"
+  | "other";
+
 export type ShipmentStatus =
   | "draft"
   | "pending"
@@ -25,14 +34,52 @@ export type CarrierType = "driver" | "traveler" | "middleman" | "external";
 
 export interface User {
   id: string;
+
+  // Identity
+  first_name: string;
+  last_name: string;
+  middle_name: string | null;
+  full_name: string; // computed server-side, always present in responses
+
+  date_of_birth: string | null; // ISO date "YYYY-MM-DD"
+  gender: Gender | null;
+  nationality: string | null; // ISO 3166-1 alpha-2
+
+  // Government ID
+  id_document_type: IdDocumentType | null;
+  id_document_number: string | null;
+  id_document_expires_at: string | null;
+  id_document_issuing_country: string | null;
+
+  // Contact
   email: string;
-  full_name: string;
   phone: string | null;
+  phone_secondary: string | null;
+
+  // Address
+  address_line1: string | null;
+  address_line2: string | null;
+  city: string | null;
+  region: string | null;
+  country: string | null;
+  postal_code: string | null;
+
+  // Auth / status
   role: Role;
-  profile: Record<string, unknown> | null;
   is_active: boolean;
   email_verified: boolean;
   phone_verified: boolean;
+  kyc_verified: boolean;
+
+  // Preferences
+  preferred_language: string;
+  preferred_currency: string;
+  timezone: string | null;
+
+  profile: Record<string, unknown> | null;
+  avatar_url: string | null;
+
+  last_login_at: string | null;
   created_at: string;
 }
 
