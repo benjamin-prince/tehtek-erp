@@ -9,10 +9,11 @@ import clsx from "clsx";
 const NAV = [
   { href: "/dashboard", label: "Overview", num: "00" },
   { href: "/shipments", label: "Shipments", num: "01" },
-  { href: "/orders", label: "Orders", num: "02", disabled: true },
+  { href: "/orders", label: "Orders", num: "02" },
   { href: "/locations", label: "Locations", num: "03", disabled: true },
   { href: "/documents", label: "Documents", num: "04", disabled: true },
-  { href: "/users", label: "Users", num: "05", disabled: true },
+  { href: "/users", label: "Users", num: "05" },
+  { href: "/products", label: "Products", num: "06" },
 ];
 
 export function Sidebar() {

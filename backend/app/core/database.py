@@ -1,7 +1,4 @@
-"""Database setup — async SQLAlchemy + SQLModel.
-
-Works with SQLite (dev) or Postgres (prod). Change DATABASE_URL env var.
-"""
+"""Database setup — async SQLAlchemy + SQLModel."""
 from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -21,20 +18,17 @@ AsyncSessionLocal = sessionmaker(
 
 
 async def init_db() -> None:
-    """Create tables at startup.
-
-    Production setups should use Alembic migrations instead.
-    """
-    # Import every module's models so SQLModel.metadata picks them up.
+    """Create tables at startup. Use Alembic migrations in production."""
     from app.modules.users import models as _users  # noqa: F401
     from app.modules.locations import models as _locations  # noqa: F401
     from app.modules.shipments import models as _shipments  # noqa: F401
     from app.modules.orders import models as _orders  # noqa: F401
     from app.modules.documents import models as _documents  # noqa: F401
+    from app.modules.inventory import models as _inventory  # noqa: F401
 
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-
+        
 
 from collections.abc import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession

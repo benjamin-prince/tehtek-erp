@@ -1,4 +1,4 @@
-import type { ShipmentStatus } from "./types";
+import type { OrderStatus, ShipmentStatus } from "./types";
 
 export const statusLabel: Record<ShipmentStatus, string> = {
   draft: "Draft",
@@ -78,4 +78,64 @@ export function formatDateShort(iso: string): string {
     month: "short",
     year: "numeric",
   });
+}
+
+// Append these to lib/format.ts
+
+export const orderStatusLabel: Record<OrderStatus, string> = {
+  draft: "Draft",
+  confirmed: "Confirmed",
+  paid: "Paid",
+  preparing: "Preparing",
+  ready_to_ship: "Ready to ship",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+  refunded: "Refunded",
+};
+
+export function orderStatusTone(status: OrderStatus): {
+  fg: string;
+  bg: string;
+  dot: string;
+} {
+  switch (status) {
+    case "delivered":
+    case "paid":
+      return {
+        fg: "var(--color-success)",
+        bg: "var(--tone-success-bg)",
+        dot: "var(--color-success)",
+      };
+    case "cancelled":
+    case "refunded":
+      return {
+        fg: "var(--color-danger)",
+        bg: "var(--tone-danger-bg)",
+        dot: "var(--color-danger)",
+      };
+    case "confirmed":
+    case "preparing":
+    case "ready_to_ship":
+    case "shipped":
+      return {
+        fg: "var(--color-accent)",
+        bg: "var(--tone-accent-bg)",
+        dot: "var(--color-accent)",
+      };
+    default: // draft
+      return {
+        fg: "var(--color-muted)",
+        bg: "var(--tone-neutral-bg)",
+        dot: "var(--color-muted)",
+      };
+  }
+}
+
+export function formatMoney(amount: number, currency: string = "EUR"): string {
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+  }).format(amount);
 }

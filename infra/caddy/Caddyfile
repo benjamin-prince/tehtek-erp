@@ -1,0 +1,7 @@
+api.tehtek.com {
+    reverse_proxy api:8000
+}
+
+dashboard.tehtek.com {
+    reverse_proxy frontend:3000
+}

@@ -165,3 +165,163 @@ export interface ShipmentCreate {
   flight_number?: string;
   flight_date?: string;
 }
+
+// Append these types to lib/types.ts (keep existing User, Shipment, etc.)
+
+export type OrderStatus =
+  | "draft"
+  | "confirmed"
+  | "paid"
+  | "preparing"
+  | "ready_to_ship"
+  | "shipped"
+  | "delivered"
+  | "cancelled"
+  | "refunded";
+
+export interface OrderItem {
+  id: string;
+  sku: string | null;
+  name: string;
+  description: string | null;
+  quantity: number;
+  unit_price: number;
+  discount: number;
+  tax_rate: number;
+  line_total: number;
+}
+
+export interface OrderItemCreate {
+  sku?: string;
+  name: string;
+  description?: string;
+  quantity: number;
+  unit_price: number;
+  discount?: number;
+  tax_rate?: number;
+}
+
+export interface Order {
+  id: string;
+  order_number: string;
+  customer_user_id: string | null;
+  customer_name: string;
+  customer_phone: string | null;
+  customer_email: string | null;
+  billing_address: string | null;
+  shipping_address: string | null;
+  status: OrderStatus;
+  subtotal: number;
+  tax_total: number;
+  discount_total: number;
+  shipping_total: number;
+  grand_total: number;
+  currency: string;
+  notes: string | null;
+  source_location_id: string | null;
+  created_at: string;
+  updated_at: string;
+  confirmed_at: string | null;
+  paid_at: string | null;
+}
+
+export interface OrderDetail extends Order {
+  items: OrderItem[];
+}
+
+export interface OrderCreate {
+  customer_user_id?: string;
+  customer_name: string;
+  customer_phone?: string;
+  customer_email?: string;
+  billing_address?: string;
+  shipping_address?: string;
+  source_location_id?: string;
+  currency?: string;
+  notes?: string;
+  shipping_total?: number;
+  items: OrderItemCreate[];
+}
+
+// Append to lib/types.ts
+
+export type ProductStatus = "active" | "inactive" | "discontinued";
+
+export type MovementType =
+  | "receive"
+  | "issue"
+  | "transfer_in"
+  | "transfer_out"
+  | "adjust";
+
+export interface Product {
+  id: string;
+  sku: string;
+  barcode: string | null;
+  name: string;
+  description: string | null;
+  category: string | null;
+  brand: string | null;
+  default_price: number;
+  default_tax_rate: number;
+  currency: string;
+  cost_price: number | null;
+  weight_kg: number | null;
+  volume_m3: number | null;
+  unit: string;
+  low_stock_threshold: number | null;
+  status: ProductStatus;
+  image_url: string | null;
+  attributes: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface ProductCreate {
+  sku: string;
+  barcode?: string;
+  name: string;
+  description?: string;
+  category?: string;
+  brand?: string;
+  default_price?: number;
+  default_tax_rate?: number;
+  currency?: string;
+  cost_price?: number;
+  weight_kg?: number;
+  volume_m3?: number;
+  unit?: string;
+  low_stock_threshold?: number;
+  status?: ProductStatus;
+  image_url?: string;
+}
+
+export interface StockLevel {
+  id: string;
+  product_id: string;
+  location_id: string;
+  quantity: number;
+  updated_at: string;
+}
+
+export interface StockByProduct {
+  product_id: string;
+  total_quantity: number;
+  levels: StockLevel[];
+}
+
+export interface StockMovement {
+  id: string;
+  product_id: string;
+  location_id: string;
+  type: MovementType;
+  quantity: number;
+  signed_quantity: number;
+  balance_after: number;
+  related_shipment_id: string | null;
+  related_order_id: string | null;
+  transfer_pair_id: string | null;
+  reference: string | null;
+  note: string | null;
+  recorded_by_id: string | null;
+  timestamp: string;
+}
